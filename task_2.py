@@ -14,11 +14,15 @@ def check_para(mn,mx,qt)->bool:
         return False
     if not isinstance(qt, int) or qt<=0:
         return False
+    if mn>mx:
+        return False
+    if qt > (mx - mn + 1):
+        return False
     return True
 
 def get_numbers_ticket(min:int, max:int, quantity:int)->list[int]:
     if not check_para(min,max,quantity):
-        return list()
+        return []
     
     set_num:set[int] = set()
 
@@ -26,7 +30,3 @@ def get_numbers_ticket(min:int, max:int, quantity:int)->list[int]:
         num = next(gen_random_num(min,max))
         set_num.add(num)
     return sorted(list(set_num))
-    
-
-rez = get_numbers_ticket(1,100,10)
-print(rez)
