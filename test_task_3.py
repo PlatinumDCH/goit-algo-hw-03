@@ -25,14 +25,24 @@ class TestNormalizePhone(unittest.TestCase):
         """only digits"""
         self.assertEqual(normalize_phone("0501234567"), "+380501234567")
 
+    def test_normalize_with_one_plus(self):
+        """normalizes with a single '+' at the start"""
+        self.assertEqual(normalize_phone("+380441234567"), "+380441234567")
+    
+    def test_normalize_with_many_plus(self):
+        """handles numbers with many '+' signs"""
+        self.assertEqual(normalize_phone("+38044++123++4567"), "+380441234567")
+
     def test_empty_string(self):
         """empty strings"""
-        self.assertEqual(normalize_phone(""), "error number format")
+        result = normalize_phone("")
+        self.assertEqual(result, "error format")
 
     def test_invalid_format(self):
         """invalid format"""
-        self.assertEqual(normalize_phone("abc123"), "error number format")
-
+        result = normalize_phone("abc123")
+        expected = "error format"
+        self.assertEqual(result, expected)
 
 if __name__ == "__main__":
     unittest.main(verbosity=3)
