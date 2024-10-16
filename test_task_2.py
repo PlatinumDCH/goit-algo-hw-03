@@ -1,26 +1,34 @@
 import unittest
 from task_2 import get_numbers_ticket
 
-class TestRandomNumberGenerator(unittest.TestCase):
-    
-    def test_get_numbers_ticket_unique(self):
-        """check if the function returns 10 unique numbers"""
-        numbers = get_numbers_ticket(10)
-        self.assertEqual(len(numbers), 10)
-        self.assertEqual(len(numbers), len(set(numbers)))
 
-    def test_get_numbers_ticket_within_range(self):
-        """chek if the function returns numbers within the range"""
-        min_value, max_value = 1, 100
-        numbers = get_numbers_ticket(10)
-        for number in numbers:
-            self.assertGreaterEqual(number, min_value)
-            self.assertLessEqual(number, max_value)
+class TestGetNumbersTicket(unittest.TestCase):
 
-    def test_get_numbers_ticket_default_quantity(self):
-        """check if the function returns 10 numbers by default"""
-        numbers = get_numbers_ticket()
-        self.assertEqual(len(numbers), 10)
-        
+    def test_correct_parameters(self):
+        result = get_numbers_ticket(1, 100, 10)
+        self.assertEqual(len(result), 10)
+        self.assertTrue(all(1 <= num <= 100 for num in result))
+        self.assertEqual(len(result), len(set(result)), "All numbers should be unique")
+
+    def test_invalid_min(self):
+        result = get_numbers_ticket(0, 100, 10)
+        self.assertEqual(result, [], "Should return empty list for invalid min")
+
+    def test_invalid_max(self):
+        result = get_numbers_ticket(1, 2000, 10)
+        self.assertEqual(result, [], "Should return empty list for invalid max")
+
+    def test_invalid_quantity(self):
+        result = get_numbers_ticket(1, 100, -5)
+        self.assertEqual(result, [], "Should return empty list for invalid quantity")
+
+    def test_no_numbers_when_min_equals_max(self):
+        result = get_numbers_ticket(1, 1, 1)
+        self.assertEqual(result, [1], "Should return [1] when min and max are equal")
+
+    def test_zero_quantity(self):
+        result = get_numbers_ticket(1, 100, 0)
+        self.assertEqual(result, [], "Should return empty list for quantity of 0")
+
 if __name__ == "__main__":
     unittest.main(verbosity=3)
