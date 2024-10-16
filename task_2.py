@@ -2,20 +2,31 @@ from random import randint
 from typing import Generator
 
 G = Generator[int, None, None]
-def gen_random_num(min: int = 1,max: int = 100)->G:
+def gen_random_num(min:int,max:int)->G:
     while True:
         yield randint(min, max)
 
 
-def get_numbers_ticket(quantity: int = 10):
-    set_num:set = set()
-    flag = True
-    while flag:
-        if len(set_num) == quantity:
-            flag = False
-        else:
-            num = next(gen_random_num())
-            set_num.add(num)
-    return set_num
+def check_para(mn,mx,qt)->bool:
+    if not isinstance(mn, int) or mn<1:
+        return False
+    if not isinstance(mx, int) or mx<1 or mx>1000:
+        return False
+    if not isinstance(qt, int) or qt<=0:
+        return False
+    return True
 
-print(get_numbers_ticket())
+def get_numbers_ticket(min:int, max:int, quantity:int)->list[int]:
+    if not check_para(min,max,quantity):
+        return list()
+    
+    set_num:set[int] = set()
+
+    while len(set_num)< quantity:
+        num = next(gen_random_num(min,max))
+        set_num.add(num)
+    return sorted(list(set_num))
+    
+
+rez = get_numbers_ticket(1,100,10)
+print(rez)
